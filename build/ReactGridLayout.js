@@ -356,25 +356,23 @@ var ReactGridLayout = /*#__PURE__*/function (_React$Component) {
         left: layerX,
         top: layerY
       };
+      var positionParams
+      /*: PositionParams*/
+      = {
+        cols: cols,
+        margin: margin,
+        maxRows: maxRows,
+        rowHeight: rowHeight,
+        containerWidth: width,
+        containerPadding: containerPadding || margin
+      };
+      var calculatedPosition = (0, _calculateUtils.calcXY)(positionParams, layerY, layerX, finalDroppingItem.w, finalDroppingItem.h);
+      Object.assign(droppingPosition, {
+        x: calculatedPosition.x,
+        y: calculatedPosition.y
+      });
 
       if (!_this.state.droppingDOMNode) {
-        var positionParams
-        /*: PositionParams*/
-        = {
-          cols: cols,
-          margin: margin,
-          maxRows: maxRows,
-          rowHeight: rowHeight,
-          containerWidth: width,
-          containerPadding: containerPadding || margin
-        };
-        var calculatedPosition = (0, _calculateUtils.calcXY)(positionParams, layerY, layerX, finalDroppingItem.w, finalDroppingItem.h);
-        Object.assign(droppingPosition, {
-          x: calculatedPosition.x,
-          y: calculatedPosition.y
-        });
-        console.log(droppingPosition);
-
         _this.setState({
           droppingDOMNode: /*#__PURE__*/React.createElement("div", {
             key: finalDroppingItem.i

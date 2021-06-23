@@ -659,26 +659,27 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const layerY = e.clientY / transformScale - bounds.top / transformScale;
     const droppingPosition = { left: layerX, top: layerY };
 
+    const positionParams: PositionParams = {
+      cols,
+      margin,
+      maxRows,
+      rowHeight,
+      containerWidth: width,
+      containerPadding: containerPadding || margin
+    };
+
+    const calculatedPosition = calcXY(
+      positionParams,
+      layerY,
+      layerX,
+      finalDroppingItem.w,
+      finalDroppingItem.h
+    );
+
+    Object.assign(droppingPosition, {x: calculatedPosition.x, y: calculatedPosition.y});
+      
     if (!this.state.droppingDOMNode) {
-      const positionParams: PositionParams = {
-        cols,
-        margin,
-        maxRows,
-        rowHeight,
-        containerWidth: width,
-        containerPadding: containerPadding || margin
-      };
 
-      const calculatedPosition = calcXY(
-        positionParams,
-        layerY,
-        layerX,
-        finalDroppingItem.w,
-        finalDroppingItem.h
-      );
-
-      Object.assign(droppingPosition, {x: calculatedPosition.x, y: calculatedPosition.y});
-      console.log(droppingPosition);
       this.setState({
         droppingDOMNode: <div key={finalDroppingItem.i} />,
         droppingPosition,
