@@ -349,7 +349,7 @@ var ReactGridLayout = /*#__PURE__*/function (_React$Component) {
       var layout = _this.state.layout; // This is relative to the DOM element that this event fired for.
       //const { layerX, layerY } = e.nativeEvent;
 
-      var bounds = e.currentTarget.getBoundingRect();
+      var bounds = e.currentTarget.getBoundingClientRect();
       var layerX = e.clientX / transformScale - bounds.left / transformScale;
       var layerY = e.clientY / transformScale - bounds.top / transformScale;
       var droppingPosition = {

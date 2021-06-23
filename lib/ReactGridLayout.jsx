@@ -654,7 +654,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const { layout } = this.state;
     // This is relative to the DOM element that this event fired for.
     //const { layerX, layerY } = e.nativeEvent;
-    const bounds = e.currentTarget.getBoundingRect();
+    const bounds = e.currentTarget.getBoundingClientRect();
     const layerX = e.clientX / transformScale - bounds.left / transformScale;
     const layerY = e.clientY / transformScale - bounds.top / transformScale;
     const droppingPosition = { left: layerX, top: layerY};
