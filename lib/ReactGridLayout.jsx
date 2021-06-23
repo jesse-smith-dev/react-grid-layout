@@ -2,7 +2,6 @@
 import * as React from "react";
 
 import isEqual from "lodash.isequal";
-import throttle from "lodash.throttle";
 import classNames from "classnames";
 import {
   bottom,
@@ -620,7 +619,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
   // Called while dragging an element. Part of browser native drag/drop API.
   // Native event target might be the layout itself, or an element within the layout.
-  onDragOver: DragOverEvent => void | false = throttle(e => {
+  onDragOver: DragOverEvent => void | false = e => {
     e.preventDefault(); // Prevent any browser native action
     e.stopPropagation();
 
@@ -699,7 +698,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         this.setState({ droppingPosition });
       }
     }
-  }, 50);
+  };
 
   removeDroppingPlaceholder: () => void = () => {
     const { droppingItem, cols } = this.props;
