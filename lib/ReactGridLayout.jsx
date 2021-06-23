@@ -642,7 +642,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       rowHeight,
       maxRows,
       width,
-      containerPadding
+      containerPadding,
+      transformScale
     } = this.props;
     // Allow user to customize the dropping item or short-circuit the drop based on the results
     // of the `onDragOver(e: Event)` callback.
@@ -652,8 +653,11 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
     const { layout } = this.state;
     // This is relative to the DOM element that this event fired for.
-    const { layerX, layerY } = e.nativeEvent;
-    const droppingPosition = { left: layerX, top: layerY, e };
+    //const { layerX, layerY } = e.nativeEvent;
+    const bounds = e.currentTarget.getBoundingRect();
+    const layerX = e.clientX / transformScale - bounds.left / transformScale;
+    const layerY = e.clientY / transformScale - bounds.top / transformScale;
+    const droppingPosition = { left: layerX, top: layerY};
 
     if (!this.state.droppingDOMNode) {
       const positionParams: PositionParams = {
