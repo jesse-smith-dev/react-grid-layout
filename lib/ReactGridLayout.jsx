@@ -657,7 +657,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const bounds = e.currentTarget.getBoundingClientRect();
     const layerX = e.clientX / transformScale - bounds.left / transformScale;
     const layerY = e.clientY / transformScale - bounds.top / transformScale;
-    const droppingPosition = { left: layerX, top: layerY};
+    const droppingPosition = { left: layerX, top: layerY };
 
     if (!this.state.droppingDOMNode) {
       const positionParams: PositionParams = {
@@ -677,6 +677,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         finalDroppingItem.h
       );
 
+      Object.assign(droppingPosition, {x: calculatedPosition.x, y: calculatedPosition.y});
+      console.log(droppingPosition);
       this.setState({
         droppingDOMNode: <div key={finalDroppingItem.i} />,
         droppingPosition,
@@ -692,8 +694,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         ]
       });
     } else if (this.state.droppingPosition) {
-      const { left, top } = this.state.droppingPosition;
-      const shouldUpdatePosition = left != layerX || top != layerY;
+      const { x, y } = this.state.droppingPosition;
+      const shouldUpdatePosition = x != droppingPosition.x || y != droppingPosition.y;
       if (shouldUpdatePosition) {
         this.setState({ droppingPosition });
       }
