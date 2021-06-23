@@ -2,6 +2,7 @@
 import * as React from "react";
 
 import isEqual from "lodash.isequal";
+import throttle from "lodash.throttle";
 import classNames from "classnames";
 import {
   bottom,
@@ -619,7 +620,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
   // Called while dragging an element. Part of browser native drag/drop API.
   // Native event target might be the layout itself, or an element within the layout.
-  onDragOver: DragOverEvent => void | false = e => {
+  onDragOver: DragOverEvent => void | false = throttle(e => {
     e.preventDefault(); // Prevent any browser native action
     e.stopPropagation();
 
@@ -659,26 +660,23 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     const layerY = e.clientY / transformScale - bounds.top / transformScale;
     const droppingPosition = { left: layerX, top: layerY };
 
-    const positionParams: PositionParams = {
-      cols,
-      margin,
-      maxRows,
-      rowHeight,
-      containerWidth: width,
-      containerPadding: containerPadding || margin
-    };
-
-    const calculatedPosition = calcXY(
-      positionParams,
-      layerY,
-      layerX,
-      finalDroppingItem.w,
-      finalDroppingItem.h
-    );
-
-    Object.assign(droppingPosition, {x: calculatedPosition.x, y: calculatedPosition.y});
-      
     if (!this.state.droppingDOMNode) {
+      const positionParams: PositionParams = {
+        cols,
+        margin,
+        maxRows,
+        rowHeight,
+        containerWidth: width,
+        containerPadding: containerPadding || margin
+      };
+
+      const calculatedPosition = calcXY(
+        positionParams,
+        layerY,
+        layerX,
+        finalDroppingItem.w,
+        finalDroppingItem.h
+      );
 
       this.setState({
         droppingDOMNode: <div key={finalDroppingItem.i} />,
@@ -695,13 +693,13 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         ]
       });
     } else if (this.state.droppingPosition) {
-      const { x, y } = this.state.droppingPosition;
-      const shouldUpdatePosition = x != droppingPosition.x || y != droppingPosition.y;
+      const { left, top } = this.state.droppingPosition;
+      const shouldUpdatePosition = left != layerX || top != layerY;
       if (shouldUpdatePosition) {
         this.setState({ droppingPosition });
       }
     }
-  };
+  }, 50);
 
   removeDroppingPlaceholder: () => void = () => {
     const { droppingItem, cols } = this.props;

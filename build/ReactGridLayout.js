@@ -11,6 +11,8 @@ var React = _interopRequireWildcard(require("react"));
 
 var _lodash = _interopRequireDefault(require("lodash.isequal"));
 
+var _lodash2 = _interopRequireDefault(require("lodash.throttle"));
+
 var _classnames = _interopRequireDefault(require("classnames"));
 
 var _utils = require("./utils");
@@ -315,7 +317,7 @@ var ReactGridLayout = /*#__PURE__*/function (_React$Component) {
       _this.onLayoutMaybeChanged(newLayout, oldLayout);
     });
 
-    _defineProperty(_assertThisInitialized(_this), "onDragOver", function (e) {
+    _defineProperty(_assertThisInitialized(_this), "onDragOver", (0, _lodash2.default)(function (e) {
       var _e$nativeEvent$target;
 
       e.preventDefault(); // Prevent any browser native action
@@ -356,23 +358,20 @@ var ReactGridLayout = /*#__PURE__*/function (_React$Component) {
         left: layerX,
         top: layerY
       };
-      var positionParams
-      /*: PositionParams*/
-      = {
-        cols: cols,
-        margin: margin,
-        maxRows: maxRows,
-        rowHeight: rowHeight,
-        containerWidth: width,
-        containerPadding: containerPadding || margin
-      };
-      var calculatedPosition = (0, _calculateUtils.calcXY)(positionParams, layerY, layerX, finalDroppingItem.w, finalDroppingItem.h);
-      Object.assign(droppingPosition, {
-        x: calculatedPosition.x,
-        y: calculatedPosition.y
-      });
 
       if (!_this.state.droppingDOMNode) {
+        var positionParams
+        /*: PositionParams*/
+        = {
+          cols: cols,
+          margin: margin,
+          maxRows: maxRows,
+          rowHeight: rowHeight,
+          containerWidth: width,
+          containerPadding: containerPadding || margin
+        };
+        var calculatedPosition = (0, _calculateUtils.calcXY)(positionParams, layerY, layerX, finalDroppingItem.w, finalDroppingItem.h);
+
         _this.setState({
           droppingDOMNode: /*#__PURE__*/React.createElement("div", {
             key: finalDroppingItem.i
@@ -387,9 +386,9 @@ var ReactGridLayout = /*#__PURE__*/function (_React$Component) {
         });
       } else if (_this.state.droppingPosition) {
         var _this$state$droppingP = _this.state.droppingPosition,
-            _x = _this$state$droppingP.x,
-            _y = _this$state$droppingP.y;
-        var shouldUpdatePosition = _x != droppingPosition.x || _y != droppingPosition.y;
+            left = _this$state$droppingP.left,
+            top = _this$state$droppingP.top;
+        var shouldUpdatePosition = left != layerX || top != layerY;
 
         if (shouldUpdatePosition) {
           _this.setState({
@@ -397,7 +396,7 @@ var ReactGridLayout = /*#__PURE__*/function (_React$Component) {
           });
         }
       }
-    });
+    }, 50));
 
     _defineProperty(_assertThisInitialized(_this), "removeDroppingPlaceholder", function () {
       var _this$props6 = _this.props,
